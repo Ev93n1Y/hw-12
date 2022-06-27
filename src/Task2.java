@@ -1,3 +1,5 @@
+import java.util.function.IntConsumer;
+
 /*Задание 2
         Напишите программу, которая выводит в консоль строку, состоящую из чисел от 1 до n,
         но с заменой некоторых значений:
@@ -17,4 +19,50 @@
         Поток D вызывает number() чтобы вывести число.
 */
 public class Task2 {
+    public static void main(String[] args) {
+        FizzBuzz fizzBuzzer = new FizzBuzz(31);
+
+        Runnable printFizz = () -> System.out.println("fizz");
+        Runnable printBuzz = () -> System.out.println("buzz");
+        Runnable printFizzBuzz = () -> System.out.println("fizzbuzz");
+        IntConsumer printNumber = System.out::println;
+
+        Thread threadA = new Thread(() -> {
+            try {
+                fizzBuzzer.fizz(printFizz);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+
+        Thread threadB = new Thread(() -> {
+            try {
+                fizzBuzzer.buzz(printBuzz);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+
+        Thread threadC = new Thread(() -> {
+            try {
+                fizzBuzzer.fizzbuzz(printFizzBuzz);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+
+        Thread threadD = new Thread(() -> {
+            try {
+                fizzBuzzer.number(printNumber);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+
+        threadA.start();
+        threadB.start();
+        threadC.start();
+        threadD.start();
+    }
 }
+
